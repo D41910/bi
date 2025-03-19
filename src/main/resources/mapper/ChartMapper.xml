@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsj.bi.mapper.ChartMapper">
+
+    <resultMap id="BaseResultMap" type="com.dsj.bi.model.entity.Chart">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="goal" column="goal" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="chartType" column="chartType" jdbcType="VARCHAR"/>
+        <result property="genChart" column="genChart" jdbcType="VARCHAR"/>
+        <result property="genResult" column="genResult" jdbcType="VARCHAR"/>
+        <result property="status" column="genResult" jdbcType="VARCHAR"/>
+        <result property="execMessage" column="execMessage" jdbcType="VARCHAR"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,goal,'name',
+        chartType,genChart,genResult,status,execMessage,userId,
+        createTime,updateTime,isDelete
+    </sql>
+    <insert id="creatTable">
+        CREATE TABLE ${tableName}
+            <foreach collection="list" index="index" separator="," open="(" close=")">
+                field_${index} VARCHAR(256)
+            </foreach>
+        ;
+    </insert>
+    <insert id="insertListData">
+        INSERT INTO ${tableName}
+        <foreach collection="listData.get(0)" index="index" open="(" close=")" separator=",">
+            field_${index}
+        </foreach>
+        VALUES
+            <foreach collection="listData" item="list" separator=",">
+                <foreach collection="list" item="data" separator="," open="(" close=")">
+                    #{data}
+                </foreach>
+            </foreach>
+        ;
+    </insert>
+    <select id="listChartData" resultType="java.util.LinkedHashMap">
+        SELECT * FROM ${tableName};
+    </select>
+</mapper>
